@@ -321,20 +321,9 @@ td.conditions-cell {
 
 .btn-apply:hover { background: #303f9f; }
 
-.landscape-hint {
-  display: none;
-  background: #ff8f00;
-  color: #fff;
-  text-align: center;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) and (orientation: portrait) {
-  .landscape-hint { display: block; }
+tr.current-hour {
+  background: #e3f2fd;
+  font-weight: 600;
 }
 
 @media (max-width: 480px) {
@@ -348,8 +337,6 @@ td.conditions-cell {
 </style>
 </head>
 <body>
-
-<div class="landscape-hint" id="landscapeHint" onclick="this.style.display='none'">Rotate phone to landscape for best view (tap to dismiss)</div>
 
 <div class="app-bar">
   <h1>MB Weather</h1>
@@ -509,7 +496,9 @@ function renderDay(index) {
 
     var light = formatLight(hour.solarradiation);
 
-    html += "<tr>";
+    var now = new Date();
+    var isCurrentHour = (index === 0 && h24 === now.getHours());
+    html += "<tr" + (isCurrentHour ? ' class="current-hour"' : "") + ">";
     html += "<td>" + timeStr + "</td>";
     html += "<td>" + temp + "</td>";
     html += "<td>" + humidity + "</td>";
@@ -601,17 +590,6 @@ document.getElementById("modal").addEventListener("click", function(e) {
   if (e.target === this) closeLocationDialog();
 });
 
-// Hide landscape hint once rotated
-if (window.matchMedia) {
-  var mq = window.matchMedia("(orientation: landscape)");
-  function onOrientationChange(e) {
-    if (e.matches) {
-      var hint = document.getElementById("landscapeHint");
-      if (hint) hint.style.display = "none";
-    }
-  }
-  mq.addEventListener("change", onOrientationChange);
-}
 </script>
 </body>
 </html>
